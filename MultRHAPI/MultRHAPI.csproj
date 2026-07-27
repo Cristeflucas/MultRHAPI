@@ -4,6 +4,7 @@
     <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>03cac335-973a-4a5d-aca9-1bb357bdc053</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
@@ -19,6 +20,11 @@
     <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="8.0.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.18.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\src\MultRH.Application\MultRH.Application.csproj" />
+    <ProjectReference Include="..\src\MultRH.Infrastructure\MultRH.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

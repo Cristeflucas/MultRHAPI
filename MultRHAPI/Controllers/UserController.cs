@@ -1,7 +1,8 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using MultRHAPI.Data.Dtos;
-using MultRHAPI.Services;
+using MultRH.Application.Users;
+using MultRH.Application.Users.Dtos;
 
 namespace MultRHAPI.Controllers
 {
@@ -9,9 +10,9 @@ namespace MultRHAPI.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
-        private UserService _userService;
+        private IUserService _userService;
 
-        public UserController(UserService userService)
+        public UserController(IUserService userService)
         {
             _userService = userService;
         }
@@ -28,6 +29,20 @@ namespace MultRHAPI.Controllers
             {
                 return BadRequest(ex.Message);
             }
+        }
+        [HttpPost("login")]
+        public async Task<IActionResult> Login(LoginUserDto dto)
+        {
+            var token = await _userService.Login(dto);
+            return Ok(token);
+        }
+
+        [HttpPatch("{id}/premium")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> SetPremium(string id, [FromQuery] bool isPremium)
+        {
+            var upgraded = await _userService.SetPremium(id, isPremium);
+            return upgraded ? NoContent() : NotFound();
         }
     }
 }

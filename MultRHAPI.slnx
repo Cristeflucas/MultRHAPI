@@ -1,3 +1,8 @@
 <Solution>
+  <Folder Name="/src/">
+    <Project Path="src/MultRH.Application/MultRH.Application.csproj" />
+    <Project Path="src/MultRH.Domain/MultRH.Domain.csproj" />
+    <Project Path="src/MultRH.Infrastructure/MultRH.Infrastructure.csproj" />
+  </Folder>
   <Project Path="MultRHAPI/MultRHAPI.csproj" />
 </Solution>
