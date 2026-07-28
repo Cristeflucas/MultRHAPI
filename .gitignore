@@ -103,6 +103,7 @@ appsettings.Development.json
 # Chutzpah Test files
 _Chutzpah*
 
+logs/
 # Visual C++ cache files
 ipch/
 *.aps

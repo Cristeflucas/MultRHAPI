@@ -32,6 +32,8 @@ namespace MultRH.Infrastructure.Auth
             var singIngCredentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
             var token = new JwtSecurityToken(
+                issuer: _configuration["Jwt:Issuer"],
+                audience: _configuration["Jwt:Audience"],
                 claims: claims,
                 expires: DateTime.Now.AddHours(1),
                 signingCredentials: singIngCredentials

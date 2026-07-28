@@ -4,5 +4,8 @@
     <Project Path="src/MultRH.Domain/MultRH.Domain.csproj" />
     <Project Path="src/MultRH.Infrastructure/MultRH.Infrastructure.csproj" />
   </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/MultRH.Application.Tests/MultRH.Application.Tests.csproj" />
+  </Folder>
   <Project Path="MultRHAPI/MultRHAPI.csproj" />
 </Solution>

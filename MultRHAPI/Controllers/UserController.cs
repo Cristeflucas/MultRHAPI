@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 using MultRH.Application.Users;
 using MultRH.Application.Users.Dtos;
 
@@ -18,6 +19,7 @@ namespace MultRHAPI.Controllers
         }
 
         [HttpPost("register")]
+        [EnableRateLimiting("auth")]
         public async Task<IActionResult> CreateUser(CreateUserDto dto)
         {
             try
@@ -31,6 +33,7 @@ namespace MultRHAPI.Controllers
             }
         }
         [HttpPost("login")]
+        [EnableRateLimiting("auth")]
         public async Task<IActionResult> Login(LoginUserDto dto)
         {
             var token = await _userService.Login(dto);
