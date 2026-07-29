@@ -10,6 +10,8 @@ Back-end do sistema de RH da **Mult Consultoria em RH** — plataforma para gest
 - **AutoMapper** e **FluentValidation**
 - **QuestPDF** para geração de documentos PDF
 - **Swagger / Swashbuckle** para documentação da API
+- **Serilog** para logging estruturado
+- **xUnit** para testes automatizados
 
 ## Arquitetura
 
@@ -28,12 +30,14 @@ Isso mantém a regra de negócio isolada de detalhes técnicos (banco de dados, 
 
 ## Funcionalidades
 
-- Cadastro e login de usuários (ASP.NET Core Identity + JWT)
+- Cadastro e login de usuários (ASP.NET Core Identity + JWT), com Issuer/Audience validados e bloqueio de conta após tentativas de login falhas
 - Autorização por papel (`Admin` / `Candidate`) e por assinatura (`IsPremium`) via claims no token
 - CRUD de vagas restrito a administradores
 - Listagem e detalhe de vagas disponíveis para qualquer usuário autenticado
 - Geração da carta de encaminhamento em PDF, restrita a usuários premium ou administradores
 - Endpoint administrativo para liberar/revogar o acesso premium de um usuário
+- Cadastro de planos de assinatura (`Plano`), com listagem aberta a qualquer autenticado e criação/edição restritas a administradores *(em desenvolvimento)*
+- Rate limiting nos endpoints de registro/login, tratamento global de exceções (ProblemDetails) e logging estruturado com Serilog
 
 ## Como rodar localmente
 
@@ -73,9 +77,15 @@ A documentação interativa fica disponível em `/swagger` (ambiente de desenvol
 | POST | `/api/Vaga` | Admin |
 | PUT | `/api/Vaga/{id}` | Admin |
 | DELETE | `/api/Vaga/{id}` | Admin |
+| GET | `/api/Plano` | Autenticado |
+| GET | `/api/Plano/{id}` | Autenticado |
+| POST | `/api/Plano` | Admin |
+| PATCH | `/api/Plano/{id}` | Admin |
 
 ## Roadmap
 
+- [x] Testes automatizados (unitários — validação de CPF e profiles do AutoMapper)
+- [ ] Finalizar CRUD de planos de assinatura
 - [ ] Integração de pagamento real (assinatura premium automática via gateway)
 - [ ] Front-end em Blazor WebAssembly
-- [ ] Testes automatizados (unitários e de integração)
+- [ ] Testes de integração

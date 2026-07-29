@@ -10,5 +10,6 @@ namespace MultRH.Infrastructure.Data
         {
         }
         public DbSet<Vaga> Vagas { get; set; }
+        public DbSet<Plano> Planos { get; set; }
     }
 }

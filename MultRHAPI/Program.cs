@@ -19,6 +19,8 @@ using System.Text;
 using System.Threading.RateLimiting;
 using Microsoft.AspNetCore.RateLimiting;
 using Serilog;
+using MultRH.Application.Planos;
+using MultRH.Infrastructure.Planos;
 
 
 Log.Logger = new LoggerConfiguration()
@@ -43,6 +45,7 @@ builder.Services.AddIdentity<User, IdentityRole>()
 // Register application services
 builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IPlanoService, PlanoService>();
 builder.Services.AddAuthorization(options =>
 {
     options.AddPolicy("VagaPdfAccess", policy =>
