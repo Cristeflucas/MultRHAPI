@@ -17,7 +17,7 @@ namespace MultRH.Infrastructure.Auth
             _configuration = configuration;
         }
 
-        public string GenerateToken(User user)
+        public string GenerateToken(User user, bool isPremium)
         {
             Claim[] claims = new[]
             {
@@ -25,7 +25,7 @@ namespace MultRH.Infrastructure.Auth
                 new Claim(ClaimTypes.Name, user.FullName),
                 new Claim(ClaimTypes.Email, user.Email),
                 new Claim(ClaimTypes.Role, user.Role.ToString()),
-                new Claim("IsPremium", user.IsPremium.ToString())
+                new Claim("IsPremium", isPremium.ToString())
             };
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["SymmetricSecurityKey"]));

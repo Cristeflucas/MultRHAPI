@@ -21,6 +21,10 @@ using Microsoft.AspNetCore.RateLimiting;
 using Serilog;
 using MultRH.Application.Planos;
 using MultRH.Infrastructure.Planos;
+using MultRH.Application.Assinaturas;
+using MultRH.Infrastructure.Assinaturas;
+using MultRH.Application.Pagamentos;
+using MultRH.Infrastructure.Pagamentos;
 
 
 Log.Logger = new LoggerConfiguration()
@@ -46,6 +50,10 @@ builder.Services.AddIdentity<User, IdentityRole>()
 builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IPlanoService, PlanoService>();
+builder.Services.AddScoped<IAssinaturaService, AssinaturaService>();
+builder.Services.AddScoped<IPagamentoService, PagamentoService>();
+builder.Services.AddScoped<MercadoPagoWebhookValidator>();
+MercadoPago.Config.MercadoPagoConfig.AccessToken = builder.Configuration["MercadoPago:AccessToken"];
 builder.Services.AddAuthorization(options =>
 {
     options.AddPolicy("VagaPdfAccess", policy =>
@@ -147,7 +155,10 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseExceptionHandler();
-app.UseHttpsRedirection();
+if (!app.Environment.IsDevelopment())
+{
+    app.UseHttpsRedirection();
+}
 app.UseSerilogRequestLogging();
 app.UseRateLimiter();
 

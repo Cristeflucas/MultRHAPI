@@ -6,6 +6,5 @@ namespace MultRH.Application.Users
     {
         Task Register(CreateUserDto dto);
         Task<string> Login(LoginUserDto dto);
-        Task<bool> SetPremium(string userId, bool isPremium);
     }
 }

@@ -36,16 +36,15 @@ namespace MultRHAPI.Controllers
         [EnableRateLimiting("auth")]
         public async Task<IActionResult> Login(LoginUserDto dto)
         {
-            var token = await _userService.Login(dto);
-            return Ok(token);
-        }
-
-        [HttpPatch("{id}/premium")]
-        [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> SetPremium(string id, [FromQuery] bool isPremium)
-        {
-            var upgraded = await _userService.SetPremium(id, isPremium);
-            return upgraded ? NoContent() : NotFound();
+            try
+            {
+                var token = await _userService.Login(dto);
+                return Ok(token);
+            }
+            catch (ApplicationException ex)
+            {
+                return Unauthorized(ex.Message);
+            }
         }
     }
 }

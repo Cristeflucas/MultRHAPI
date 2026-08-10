@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MultRH.Infrastructure.Data;
 
@@ -10,9 +11,11 @@ using MultRH.Infrastructure.Data;
 namespace MultRH.Infrastructure.Migrations
 {
     [DbContext(typeof(UserDbContext))]
-    partial class UserDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260807162837_RemoveIsPremiumFromUser")]
+    partial class RemoveIsPremiumFromUser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -174,35 +177,6 @@ namespace MultRH.Infrastructure.Migrations
                     b.HasIndex("PlanoId");
 
                     b.ToTable("Assinaturas");
-                });
-
-            modelBuilder.Entity("MultRH.Domain.Entities.Pagamento", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<string>("MercadoPagoPaymentId")
-                        .HasColumnType("longtext");
-
-                    b.Property<int>("PlanoId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("PlanoId");
-
-                    b.ToTable("Pagamentos");
                 });
 
             modelBuilder.Entity("MultRH.Domain.Entities.Plano", b =>
@@ -405,17 +379,6 @@ namespace MultRH.Infrastructure.Migrations
                 });
 
             modelBuilder.Entity("MultRH.Domain.Entities.Assinatura", b =>
-                {
-                    b.HasOne("MultRH.Domain.Entities.Plano", "Plano")
-                        .WithMany()
-                        .HasForeignKey("PlanoId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Plano");
-                });
-
-            modelBuilder.Entity("MultRH.Domain.Entities.Pagamento", b =>
                 {
                     b.HasOne("MultRH.Domain.Entities.Plano", "Plano")
                         .WithMany()

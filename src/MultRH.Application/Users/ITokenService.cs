@@ -4,6 +4,6 @@ namespace MultRH.Application.Users
 {
     public interface ITokenService
     {
-        string GenerateToken(User user);
+        string GenerateToken(User user, bool isPremium);
     }
 }

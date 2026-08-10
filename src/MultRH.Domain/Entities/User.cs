@@ -13,6 +13,5 @@ namespace MultRH.Domain.Entities
         public string? Cpf { get; set; }
         [Required]
         public UserRole Role { get; set; }
-        public bool IsPremium { get; set; }
     }
 }

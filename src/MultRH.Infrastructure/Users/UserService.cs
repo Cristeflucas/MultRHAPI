@@ -5,6 +5,7 @@ using MultRH.Application.Users.Dtos;
 using MultRH.Domain.Entities;
 using MultRH.Domain.Enums;
 using Microsoft.Extensions.Logging;
+using MultRH.Application.Assinaturas;
 
 namespace MultRH.Infrastructure.Users
 {
@@ -15,15 +16,17 @@ namespace MultRH.Infrastructure.Users
         private SignInManager<User> _signInManager;
         private ITokenService _tokenService;
         private ILogger<UserService> _logger;
+        private readonly IAssinaturaService _assinaturaService;
 
         public UserService(IMapper mapper, UserManager<User> userManager, SignInManager<User> signInManager, 
-            ITokenService tokenService, ILogger<UserService> logger)
+            ITokenService tokenService, ILogger<UserService> logger, IAssinaturaService assinaturaService)
         {
             _mapper = mapper;
             _userManager = userManager;
             _signInManager = signInManager;
             _tokenService = tokenService;
             _logger = logger;
+            _assinaturaService = assinaturaService;
         }
 
         public async Task Register(CreateUserDto dto)
@@ -55,25 +58,10 @@ namespace MultRH.Infrastructure.Users
             }
             var user = _signInManager.UserManager.Users.FirstOrDefault(u => u.NormalizedEmail == dto.Email.ToUpper());
 
-            var token = _tokenService.GenerateToken(user);
+            var temPremium = await _assinaturaService.TemAssinaturaAtiva(user.Id);
+            var token = _tokenService.GenerateToken(user, temPremium);
 
             return token;
-        }
-
-        public async Task<bool> SetPremium(string userId, bool isPremium)
-        {
-            var user = await _userManager.FindByIdAsync(userId);
-            if (user is null)
-            {
-                return false;
-            }
-
-            user.IsPremium = isPremium;
-            var result = await _userManager.UpdateAsync(user);
-            if (result.Succeeded) {
-                _logger.LogInformation("Usuário {UserId} teve premium alterado para {IsPremium}", userId, isPremium);
-            }
-            return result.Succeeded;
         }
     }
 }
