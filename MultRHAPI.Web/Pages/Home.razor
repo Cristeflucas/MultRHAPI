@@ -1,0 +1,36 @@
+@page "/"
+
+<PageTitle>Mult RH - Início</PageTitle>
+
+<section class="hero">
+    <div class="container hero-content">
+        <h1>NÃO PERCA SEU TEMPO</h1>
+        <p>
+            Faça o cadastro do seu currículo hoje mesmo em nosso banco de dados
+            e vá direto para a entrevista na empresa contratante.
+        </p>
+        <AuthorizeView>
+            <NotAuthorized>
+                <a href="register" class="btn-hero">Cadastre-se</a>
+            </NotAuthorized>
+            <Authorized>
+                <a href="vagas" class="btn-hero">Ver vagas disponíveis</a>
+            </Authorized>
+        </AuthorizeView>
+    </div>
+</section>
+
+<section class="container info-section">
+    <div class="info-card">
+        <h3>Vagas atualizadas</h3>
+        <p>Acesso às vagas mais recentes cadastradas pela nossa equipe.</p>
+    </div>
+    <div class="info-card">
+        <h3>Carta de encaminhamento</h3>
+        <p>Assinantes premium podem gerar a carta de encaminhamento em PDF pra entrevista.</p>
+    </div>
+    <div class="info-card">
+        <h3>Mais de 20 anos de mercado</h3>
+        <p>Integrando e reintegrando profissionais no mercado de trabalho desde 2004.</p>
+    </div>
+</section>

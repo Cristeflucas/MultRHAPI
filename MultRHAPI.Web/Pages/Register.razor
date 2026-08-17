@@ -1,0 +1,89 @@
+@page "/register"
+@inject AuthService AuthService
+@inject NavigationManager Navigation
+
+<PageTitle>Cadastre-se - Mult RH</PageTitle>
+
+<section class="auth-page">
+    <div class="auth-card">
+        <h2>Cadastre-se</h2>
+
+        <EditForm Model="@model" OnValidSubmit="HandleRegister">
+            <DataAnnotationsValidator />
+
+            <div class="form-group">
+                <label>Nome completo</label>
+                <InputText @bind-Value="model.FullName" class="form-control" />
+                <ValidationMessage For="@(() => model.FullName)" />
+            </div>
+
+            <div class="form-group">
+                <label>CPF</label>
+                <InputText @bind-Value="model.Cpf" class="form-control" />
+                <ValidationMessage For="@(() => model.Cpf)" />
+            </div>
+
+            <div class="form-group">
+                <label>E-mail</label>
+                <InputText @bind-Value="model.Email" class="form-control" />
+                <ValidationMessage For="@(() => model.Email)" />
+            </div>
+
+            <div class="form-group">
+                <label>Senha</label>
+                <InputText type="password" @bind-Value="model.Password" class="form-control" />
+                <ValidationMessage For="@(() => model.Password)" />
+            </div>
+
+            <div class="form-group">
+                <label>Confirmar senha</label>
+                <InputText type="password" @bind-Value="model.ConfirmPassword" class="form-control" />
+                <ValidationMessage For="@(() => model.ConfirmPassword)" />
+            </div>
+
+            @if (!string.IsNullOrEmpty(errorMessage))
+            {
+                <p class="error-message">@errorMessage</p>
+            }
+            @if (!string.IsNullOrEmpty(successMessage))
+            {
+                <p class="success-message">@successMessage</p>
+            }
+
+            <button type="submit" class="btn-primary-mult" disabled="@isLoading">
+                @(isLoading ? "Enviando..." : "Cadastrar")
+            </button>
+        </EditForm>
+
+        <p class="auth-switch">Já tem conta? <a href="login">Entrar</a></p>
+    </div>
+</section>
+
+@code {
+    private RegisterDto model = new();
+    private string? errorMessage;
+    private string? successMessage;
+    private bool isLoading;
+
+    private async Task HandleRegister()
+    {
+        isLoading = true;
+        errorMessage = null;
+        successMessage = null;
+
+        var (success, error) = await AuthService.RegisterAsync(model);
+
+        isLoading = false;
+
+        if (success)
+        {
+            successMessage = "Cadastro realizado com sucesso! Redirecionando para o login...";
+            await Task.Delay(1500);
+            Navigation.NavigateTo("/login");
+        }
+        else
+        {
+            errorMessage = error ?? "Não foi possível concluir o cadastro.";
+        }
+    }
+}

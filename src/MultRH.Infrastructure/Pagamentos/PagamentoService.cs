@@ -9,6 +9,7 @@ using MultRH.Application.Pagamentos.Dtos;
 using MultRH.Domain.Entities;
 using MultRH.Domain.Enums;
 using MultRH.Infrastructure.Data;
+using MercadoPago.Client.Common;
 
 namespace MultRH.Infrastructure.Pagamentos
 {
@@ -89,6 +90,50 @@ namespace MultRH.Infrastructure.Pagamentos
                 pagamento.Status = StatusPagamento.Rejeitado;
             }
             await _context.SaveChangesAsync();
+        }
+
+        public async Task<PagamentoPixDto> CreatePix(string userId, CreatePagamentoPixDto dto)
+        {
+            var plano = await _context.Planos.FindAsync(dto.PlanoId)
+                ?? throw new ApplicationException("Plano não encontrado.");
+
+            var pagamento = new Pagamento
+            {
+                UserId = userId,
+                PlanoId = dto.PlanoId,
+                Status = StatusPagamento.Pendente
+            };
+            _context.Pagamentos.Add(pagamento);
+            await _context.SaveChangesAsync();
+
+            var request = new PaymentCreateRequest
+            {
+                TransactionAmount = plano.Valor,
+                Description = $"Assinatura do {plano.Nome} - Mult RH",
+                PaymentMethodId = "pix",
+                Payer = new PaymentPayerRequest
+                {
+                    Email = dto.PayerEmail,
+                    Identification = new IdentificationRequest { Type = "CPF", Number = dto.PayerCpf }
+                },
+                ExternalReference = pagamento.Id.ToString(),
+            };
+
+            var client = new PaymentClient();
+            Payment resultado = await client.CreateAsync(request);
+
+            pagamento.MercadoPagoPaymentId = resultado.Id.ToString();
+            await _context.SaveChangesAsync();
+
+            return new PagamentoPixDto
+            {
+                Id = pagamento.Id,
+                StatusPagamento = pagamento.Status,
+                MercadoPagoPaymentId = pagamento.MercadoPagoPaymentId,
+                QrCode = resultado.PointOfInteraction?.TransactionData?.QrCode,
+                QrCodeBase64 = resultado.PointOfInteraction?.TransactionData?.QrCodeBase64
+            };
+
         }
     }
 }

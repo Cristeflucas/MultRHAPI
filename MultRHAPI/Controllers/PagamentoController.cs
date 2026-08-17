@@ -47,5 +47,15 @@ namespace MultRHAPI.Controllers
             await _pagamentoService.ProcessarNotificacao(resourceId);
             return Ok();
         }
+
+        [HttpPost("pix")]
+        [Authorize]
+        public async Task<IActionResult> CreatePix(CreatePagamentoPixDto dto)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier)!;
+            var pagamento = await _pagamentoService.CreatePix(userId, dto);
+            return Ok(pagamento);
+        }
+
     }
 }

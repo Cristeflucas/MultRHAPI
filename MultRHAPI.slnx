@@ -7,5 +7,6 @@
   <Folder Name="/tests/">
     <Project Path="tests/MultRH.Application.Tests/MultRH.Application.Tests.csproj" />
   </Folder>
+  <Project Path="MultRHAPI.Web/MultRHAPI.Web.csproj" />
   <Project Path="MultRHAPI/MultRHAPI.csproj" />
 </Solution>

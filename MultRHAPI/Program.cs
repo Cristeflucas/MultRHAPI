@@ -81,6 +81,16 @@ builder.Services.AddAuthentication(options =>
 });
 builder.Services.Configure<MultRhSettings>(builder.Configuration.GetSection("MultRhSettings"));
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("BlazorClient", policy =>
+    {
+        policy.WithOrigins("https://localhost:7130", "http://localhost:5180")
+            .AllowAnyHeader()
+            .AllowAnyMethod();
+    });
+});
+
 builder.Services.AddFluentValidationAutoValidation();
 
 builder.Services.AddValidatorsFromAssemblyContaining<CreateUserDtoValidator>();
@@ -161,6 +171,7 @@ if (!app.Environment.IsDevelopment())
 }
 app.UseSerilogRequestLogging();
 app.UseRateLimiter();
+app.UseCors("BlazorClient");
 
 app.UseAuthentication();
 app.UseAuthorization();

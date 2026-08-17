@@ -1,0 +1,63 @@
+@inject AuthService AuthService
+@inject NavigationManager Navigation
+
+<header class="site-header">
+    <div class="container top-bar">
+        <a href="" class="logo-link">
+            <img src="images/logo-mult.png" alt="Mult RH" class="logo" />
+        </a>
+
+        <div class="contact-info">
+            <div class="phone">(84) 3027-4420 / 98818-4914</div>
+            <div class="hours">Segunda à Sexta-feira das 08h às 17h</div>
+        </div>
+
+        <div class="social-icons">
+            <a href="https://wa.me/558488184914" target="_blank" rel="noopener" aria-label="WhatsApp">WhatsApp</a>
+            <a href="https://facebook.com" target="_blank" rel="noopener" aria-label="Facebook">Facebook</a>
+            <a href="https://instagram.com" target="_blank" rel="noopener" aria-label="Instagram">Instagram</a>
+        </div>
+    </div>
+
+    <nav class="main-nav">
+        <div class="container nav-container">
+            <button class="nav-toggle" @onclick="ToggleNavMenu" aria-label="Abrir menu">☰</button>
+
+            <ul class="nav-links @(collapseNavMenu ? "collapsed" : "")">
+                <li><NavLink href="" Match="NavLinkMatch.All">INÍCIO</NavLink></li>
+                <li><NavLink href="sobre">A MULT</NavLink></li>
+                <li><NavLink href="vagas">VAGAS</NavLink></li>
+                <li><NavLink href="planos">PLANOS</NavLink></li>
+                <li><NavLink href="contato">CONTATO</NavLink></li>
+            </ul>
+
+            <div class="nav-auth">
+                <AuthorizeView>
+                    <Authorized>
+                        <span class="user-greeting">Olá, @context.User.Identity?.Name</span>
+                        <button class="btn-auth" @onclick="HandleLogout">Sair</button>
+                    </Authorized>
+                    <NotAuthorized>
+                        <a href="login" class="btn-auth">Entrar</a>
+                        <a href="register" class="btn-auth btn-auth-solid">Cadastre-se</a>
+                    </NotAuthorized>
+                </AuthorizeView>
+            </div>
+        </div>
+    </nav>
+</header>
+
+@code {
+    private bool collapseNavMenu = true;
+
+    private void ToggleNavMenu()
+    {
+        collapseNavMenu = !collapseNavMenu;
+    }
+
+    private async Task HandleLogout()
+    {
+        await AuthService.LogoutAsync();
+        Navigation.NavigateTo("/", forceLoad: true);
+    }
+}
